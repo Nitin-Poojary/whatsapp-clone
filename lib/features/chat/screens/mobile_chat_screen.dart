@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsappclone/common/widgets/loader.dart';
 import 'package:whatsappclone/features/auth/controller/auth_controller.dart';
-import 'package:whatsappclone/info.dart';
 import 'package:whatsappclone/models/user_model.dart';
-import 'package:whatsappclone/widgets/chat_list.dart';
+import 'package:whatsappclone/features/chat/widgets/chat_list.dart';
 
 import '../widgets/bottom_chat_widget.dart';
 
 class MobileChatScreen extends ConsumerWidget {
-  const MobileChatScreen({super.key, required this.name, required this.uid});
+  const MobileChatScreen({
+    super.key,
+    required this.name,
+    required this.uid,
+    required this.profilePic,
+  });
 
   final String name;
   final String uid;
+  final String profilePic;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,8 +30,7 @@ class MobileChatScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: CircleAvatar(
                 maxRadius: 16,
-                backgroundImage:
-                    NetworkImage(contacts[0]["profilePic"].toString()),
+                backgroundImage: NetworkImage(profilePic),
               ),
             ),
             Expanded(
@@ -77,8 +81,8 @@ class MobileChatScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          const Expanded(
-            child: ChatsList(),
+          Expanded(
+            child: ChatsList(receiverUserId: uid),
           ),
           BottomChatWidget(
             receiverUserId: uid,

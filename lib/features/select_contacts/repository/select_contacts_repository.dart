@@ -33,16 +33,17 @@ class SelectContactsRepository {
           await firestore.collection("users").get();
       bool isFound = false;
       for (var document in userCollection.docs) {
-        var userData = UserModel.fromMap(document.data());
-
+        UserModel userData = UserModel.fromMap(document.data());
         String selectedPhoneNumber =
             selectedContact.phones[0].number.replaceAll(" ", '');
 
         if (selectedPhoneNumber == userData.phoneNumber) {
           isFound = true;
+          print(userData.profilePic);
           Navigator.pushNamed(context, mobileChatScreen, arguments: {
             'name': userData.name,
             'uid': userData.uid,
+            'profilePic': userData.profilePic,
           });
         }
       }

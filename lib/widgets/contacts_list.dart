@@ -5,7 +5,6 @@ import 'package:whatsappclone/common/utils/colors.dart';
 import 'package:whatsappclone/common/utils/page_routes.dart';
 import 'package:whatsappclone/common/widgets/loader.dart';
 import 'package:whatsappclone/features/chat/controller/chat_controller.dart';
-import 'package:whatsappclone/info.dart';
 
 import '../models/chat_contact.dart';
 
@@ -32,12 +31,13 @@ class ContactsList extends ConsumerWidget {
                           arguments: {
                             "name": chatContactData.name,
                             "uid": chatContactData.contactId,
+                            "profilePic": chatContactData.profilePic,
                           });
                     }),
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage(
-                          contacts[index]["profilePic"].toString(),
+                          chatContactData.profilePic,
                         ),
                       ),
                       title: Text(

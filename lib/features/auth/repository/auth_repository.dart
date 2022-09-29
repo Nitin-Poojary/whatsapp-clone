@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsappclone/common/utils/page_routes.dart';
 import 'package:whatsappclone/common/utils/utils.dart';
 import 'package:whatsappclone/models/user_model.dart';
-import 'package:whatsappclone/repository/common_firebase_storage_repository.dart';
+import 'package:whatsappclone/common/repository/common_firebase_storage_repository.dart';
 import 'package:whatsappclone/screens/mobile_screen_layout.dart';
 
 final authRepositoryProvider = Provider(((ref) {
@@ -110,5 +110,12 @@ class AuthRepository {
         .doc(uid)
         .snapshots()
         .map((event) => UserModel.fromMap(event.data()!));
+  }
+
+  void setUserState(bool isOnline) async {
+    await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .update({'isOnline': isOnline});
   }
 }
