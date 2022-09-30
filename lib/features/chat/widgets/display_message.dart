@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:whatsappclone/common/enums/message_enum.dart';
 
+import 'video_player_widget.dart';
+
 class DisplayMessage extends StatelessWidget {
   const DisplayMessage({
     Key? key,
@@ -26,6 +28,10 @@ class DisplayMessage extends StatelessWidget {
           );
         } else if (messageType == MessageEnum.image) {
           return CachedNetworkImage(imageUrl: message);
+        } else if (messageType == MessageEnum.video) {
+          return VideoPlayer(
+            videoUrl: message,
+          );
         }
         return Container();
       },
