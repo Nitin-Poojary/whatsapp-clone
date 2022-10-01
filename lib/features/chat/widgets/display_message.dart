@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,36 @@ class DisplayMessage extends StatelessWidget {
           return VideoPlayer(
             videoUrl: message,
           );
+        } else if (messageType == MessageEnum.audio) {
+          bool isPlaying = false;
+          final AudioPlayer audioPlayer = AudioPlayer();
+
+          return StatefulBuilder(builder: (context, setState) {
+            return IconButton(
+              constraints: const BoxConstraints(
+                minWidth: 100,
+              ),
+              onPressed: () async {
+                if (isPlaying) {
+                  await audioPlayer.pause();
+                  setState(() {
+                    isPlaying = false;
+                  });
+                } else {
+                  await audioPlayer.play(UrlSource(message));
+                  setState(() {
+                    isPlaying = true;
+                  });
+                }
+              },
+              icon: Align(
+                alignment: Alignment.center,
+                child: Icon(
+                  isPlaying ? Icons.pause_circle : Icons.play_circle,
+                ),
+              ),
+            );
+          });
         }
         return Container();
       },

@@ -23,7 +23,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
         CachedVideoPlayerController.network(widget.videoUrl)
           ..initialize().then((value) {
             _videoPlayerController.setVolume(1);
-          });
+          }).whenComplete(() => _videoPlayerController.pause());
+    _videoPlayerController.setLooping(true);
     super.initState();
   }
 
@@ -35,8 +36,13 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 5 / 7,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: 300,
+        maxWidth: MediaQuery.of(context).size.width * 0.7,
+        minHeight: 50,
+        minWidth: 50,
+      ),
       child: Stack(
         children: [
           CachedVideoPlayer(_videoPlayerController),
