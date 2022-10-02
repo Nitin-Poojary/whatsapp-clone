@@ -7,8 +7,10 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:whatsappclone/common/enums/message_enum.dart';
+import 'package:whatsappclone/common/providers/message_reply_provider.dart';
 import 'package:whatsappclone/common/utils/utils.dart';
 import 'package:whatsappclone/features/chat/controller/chat_controller.dart';
+import 'package:whatsappclone/features/chat/widgets/message_reply_preview.dart';
 
 import '../../../common/utils/colors.dart';
 
@@ -96,22 +98,22 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
     }
   }
 
-  void changeEmojiContainer() {
-    _isShowEmojiContainer = !_isShowEmojiContainer;
+  void toggleEmojiContainer() {
+    _isShowEmojiContainer = true;
+    setState(() {});
   }
 
   void changeKeyboardContainer() {
-    if (!_isShowEmojiContainer) {
-      _focusNode.requestFocus();
-    } else {
+    if (_focusNode.hasFocus && _isShowEmojiContainer) {
       _focusNode.unfocus();
+    } else {
+      _focusNode.requestFocus();
     }
   }
 
   void toggelEmojiKeyboardContainer() {
-    changeEmojiContainer();
     changeKeyboardContainer();
-    setState(() {});
+    toggleEmojiContainer();
   }
 
   void sendAudioMessage() async {
@@ -130,9 +132,13 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final messageReply = ref.watch(messageReplyProvider);
+    bool isShowMessageReply = messageReply != null;
+
     return WillPopScope(
       child: Column(
         children: [
+          isShowMessageReply ? const MessageReplyPreview() : const SizedBox(),
           Row(
             children: [
               Expanded(
@@ -154,7 +160,7 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
                       }
                     },
                     onTap: () {
-                      _isShowEmojiContainer = false;
+                      _isShowEmojiContainer = true;
                       _focusNode.requestFocus();
                       setState(() {});
                     },
@@ -219,6 +225,9 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
                     if (_messageController.text.trim().isNotEmpty) {
                       sendTextMessage();
                       _messageController.text = '';
+                      setState(() {
+                        _isShowSendButton = false;
+                      });
                     }
                     if (_isRecording) {
                       sendAudioMessage();
@@ -243,7 +252,7 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
           ),
           _isShowEmojiContainer
               ? SizedBox(
-                  height: 310,
+                  height: 255,
                   child: EmojiPicker(
                     onEmojiSelected: (category, emoji) {
                       _messageController.text += emoji.emoji;
@@ -314,7 +323,10 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      onPressed: selecVideo,
+                      onPressed: () {
+                        selecVideo();
+                        Navigator.pop(context);
+                      },
                       icon: const Icon(
                         Icons.videocam,
                         color: blackColor,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:whatsappclone/common/providers/message_reply_provider.dart';
 import 'package:whatsappclone/features/auth/controller/auth_controller.dart';
 import 'package:whatsappclone/features/chat/repository/chat_repository.dart';
 import 'package:whatsappclone/models/chat_contact.dart';
@@ -31,12 +32,17 @@ class ChatContoller {
     String text,
     String receiverUserId,
   ) {
-    ref.read(userDataAuthProvider).whenData((value) =>
-        chatRepository.sendTextMessage(
-            context: context,
-            text: text,
-            receiverUserId: receiverUserId,
-            senderUser: value!));
+    final messageReply = ref.read(messageReplyProvider);
+    ref
+        .read(userDataAuthProvider)
+        .whenData((value) => chatRepository.sendTextMessage(
+              context: context,
+              text: text,
+              receiverUserId: receiverUserId,
+              senderUser: value!,
+              messageReply: messageReply,
+            ));
+    ref.read(messageReplyProvider.state).update((state) => null);
   }
 
   Stream<List<ChatContact>> getChatContacts() {
@@ -53,15 +59,17 @@ class ChatContoller {
     String receiverUserId,
     MessageEnum messageEnum,
   ) {
-    ref
-        .read(userDataAuthProvider)
-        .whenData((value) => chatRepository.sendFileMessage(
-              context: context,
-              file: file,
-              receiverUserId: receiverUserId,
-              senderUserData: value!,
-              messageEnum: messageEnum,
-              ref: ref,
-            ));
+    final messageReply = ref.read(messageReplyProvider);
+    ref.read(userDataAuthProvider).whenData(
+          (value) => chatRepository.sendFileMessage(
+            context: context,
+            file: file,
+            receiverUserId: receiverUserId,
+            senderUserData: value!,
+            messageEnum: messageEnum,
+            ref: ref,
+            messageReply: messageReply,
+          ),
+        );
   }
 }
