@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:whatsappclone/common/utils/colors.dart';
 import 'package:whatsappclone/common/utils/page_routes.dart';
 import 'package:whatsappclone/features/auth/controller/auth_controller.dart';

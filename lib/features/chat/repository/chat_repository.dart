@@ -123,6 +123,7 @@ class ChatRepository {
         receiverId: receiverUserId,
         text: text,
         type: messageType,
+        messageId: messageId,
         timeSent: timeSent,
         isSeen: false,
         repliedMessage: messageReply == null ? '' : messageReply.message,

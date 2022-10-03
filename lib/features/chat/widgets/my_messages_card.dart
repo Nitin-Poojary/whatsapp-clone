@@ -15,11 +15,13 @@ class MyMessageCard extends StatelessWidget {
     required this.repliedText,
     required this.userName,
     required this.repliedMessageType,
+    required this.isSeen,
   });
 
   final String message, date, repliedText, userName;
   final MessageEnum messageType, repliedMessageType;
   final VoidCallback onRightSwipe;
+  final bool isSeen;
 
   @override
   Widget build(BuildContext context) {
@@ -99,11 +101,17 @@ class MyMessageCard extends StatelessWidget {
                       const SizedBox(
                         width: 3,
                       ),
-                      const Icon(
-                        Icons.done_all,
-                        size: 20,
-                        color: Colors.white60,
-                      ),
+                      isSeen
+                          ? const Icon(
+                              Icons.done_all,
+                              size: 20,
+                              color: Colors.blue,
+                            )
+                          : const Icon(
+                              Icons.done_all,
+                              size: 20,
+                              color: Colors.white60,
+                            ),
                     ],
                   ),
                 ),

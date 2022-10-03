@@ -72,4 +72,9 @@ class ChatContoller {
           ),
         );
   }
+
+  void setChatMessageSeen(
+      BuildContext context, String receiverUserId, String messageId) async {
+    chatRepository.setChatMessageSeen(context, receiverUserId, messageId);
+  }
 }
