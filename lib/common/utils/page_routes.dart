@@ -4,3 +4,5 @@ const String otpScreen = '/otpScreen';
 const String userInfoScreen = '/userInfoScreen';
 const String selectContactsScreen = '/selectContactsScreen';
 const String mobileChatScreen = '/mobileChatScreen';
+const String statusScreen = '/statusScreen';
+const String confirmStatusScreen = "/confirmStatusScreen";

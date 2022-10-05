@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:whatsappclone/common/utils/page_routes.dart';
 import 'package:whatsappclone/common/widgets/error_widget.dart';
@@ -6,6 +8,8 @@ import 'package:whatsappclone/features/auth/screens/otp_screen.dart';
 import 'package:whatsappclone/features/auth/screens/user_info_screen.dart';
 import 'package:whatsappclone/features/select_contacts/screens/select_contacts_screen.dart';
 import 'package:whatsappclone/features/chat/screens/mobile_chat_screen.dart';
+import 'package:whatsappclone/features/status/screens/confirm_status_sceen.dart';
+import 'package:whatsappclone/features/status/screens/status_screen.dart';
 import 'package:whatsappclone/screens/mobile_screen_layout.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -45,6 +49,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           uid: uid,
           profilePic: profilePic,
         ),
+      );
+    case statusScreen:
+      return MaterialPageRoute(
+        builder: (context) => const StatusScreen(),
+      );
+    case confirmStatusScreen:
+      final File arguments = settings.arguments as File;
+      return MaterialPageRoute(
+        builder: (context) => ConfirmStatusScreen(file: arguments),
       );
     default:
       return MaterialPageRoute(

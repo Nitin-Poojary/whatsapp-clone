@@ -39,7 +39,6 @@ class SelectContactsRepository {
 
         if (selectedPhoneNumber == userData.phoneNumber) {
           isFound = true;
-          print(userData.profilePic);
           Navigator.pushNamed(context, mobileChatScreen, arguments: {
             'name': userData.name,
             'uid': userData.uid,
