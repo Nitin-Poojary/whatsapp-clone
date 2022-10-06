@@ -117,12 +117,13 @@ class StatusRepository {
               isEqualTo: contacts[i].phones[0].number.replaceAll(" ", ''),
             )
             .where(
-              "createAt",
+              "createdAt",
               isGreaterThan: DateTime.now()
                   .subtract(const Duration(hours: 24))
                   .millisecondsSinceEpoch,
             )
             .get();
+
         for (var tempData in statusesSnapshot.docs) {
           Status tempStatus = Status.fromMap(tempData.data());
           if (tempStatus.whoCanSee.contains(auth.currentUser!.uid)) {
@@ -130,7 +131,6 @@ class StatusRepository {
           }
         }
       }
-      print(statusData.length);
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }

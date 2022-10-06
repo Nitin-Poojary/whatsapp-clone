@@ -17,35 +17,36 @@ class StatusScreen extends ConsumerWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Loader();
-          }
-          return ListView.separated(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              Status statusData = snapshot.data![index];
-              return InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        statusData.profilePic,
+          } else {
+            return ListView.separated(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                Status statusData = snapshot.data![index];
+                return InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          statusData.profilePic,
+                        ),
+                      ),
+                      title: Text(
+                        statusData.userName,
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ),
-                    title: Text(
-                      statusData.userName,
-                      style: const TextStyle(fontSize: 18),
-                    ),
                   ),
-                ),
-              );
-            },
-            separatorBuilder: (context, index) => const Divider(
-              color: dividerColor,
-              height: 8,
-              thickness: 0,
-            ),
-          );
+                );
+              },
+              separatorBuilder: (context, index) => const Divider(
+                color: dividerColor,
+                height: 8,
+                thickness: 0,
+              ),
+            );
+          }
         },
       ),
     );
