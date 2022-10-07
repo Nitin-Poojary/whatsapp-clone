@@ -77,7 +77,10 @@ class StatusRepository {
         await firestore
             .collection("status")
             .doc(statusesSnapshot.docs[0].id)
-            .update({'photoUrl': statusImageUrls});
+            .update({
+          'photoUrl': statusImageUrls,
+          "whoCanSee": uidWhoCanSee,
+        });
         return;
       } else {
         statusImageUrls = [imageUrl];

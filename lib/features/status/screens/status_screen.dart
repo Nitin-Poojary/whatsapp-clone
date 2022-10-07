@@ -1,54 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:story_view/story_view.dart';
 import 'package:whatsappclone/common/widgets/loader.dart';
-import 'package:whatsappclone/features/status/controller/status_controller.dart';
 
-import '../../../common/utils/colors.dart';
-import '../../../models/status_model.dart';
+import 'package:whatsappclone/models/status_model.dart';
 
-class StatusScreen extends ConsumerWidget {
-  const StatusScreen({Key? key}) : super(key: key);
+class StatusScreen extends StatefulWidget {
+  const StatusScreen({
+    Key? key,
+    required this.status,
+  }) : super(key: key);
+
+  final Status status;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<StatusScreen> createState() => _StatusScreenState();
+}
+
+class _StatusScreenState extends State<StatusScreen> {
+  final StoryController _storyController = StoryController();
+  List<StoryItem> storyItems = [];
+
+  @override
+  void initState() {
+    initStoryPageItems();
+    super.initState();
+  }
+
+  void initStoryPageItems() {
+    for (int i = 0; i < widget.status.photoUrl.length; i++) {
+      storyItems.add(
+        StoryItem.pageImage(
+          url: widget.status.photoUrl[i],
+          controller: _storyController,
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Status>>(
-        future: ref.read(statusControllerProvider).getStatus(context),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Loader();
-          } else {
-            return ListView.separated(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                Status statusData = snapshot.data![index];
-                return InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          statusData.profilePic,
-                        ),
-                      ),
-                      title: Text(
-                        statusData.userName,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  ),
-                );
+      body: storyItems.isEmpty
+          ? const Loader()
+          : StoryView(
+              storyItems: storyItems,
+              controller: _storyController,
+              onVerticalSwipeComplete: (direction) {
+                if (direction == Direction.down) {
+                  Navigator.pop(context);
+                }
               },
-              separatorBuilder: (context, index) => const Divider(
-                color: dividerColor,
-                height: 8,
-                thickness: 0,
-              ),
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 }

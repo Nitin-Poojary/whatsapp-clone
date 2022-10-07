@@ -7,7 +7,7 @@ import 'package:whatsappclone/common/utils/colors.dart';
 import 'package:whatsappclone/common/utils/page_routes.dart';
 import 'package:whatsappclone/common/utils/utils.dart';
 import 'package:whatsappclone/features/auth/controller/auth_controller.dart';
-import 'package:whatsappclone/features/status/screens/status_screen.dart';
+import 'package:whatsappclone/features/status/screens/status_contact_screen.dart';
 import 'package:whatsappclone/widgets/contacts_list.dart';
 
 class MobileScreenLayout extends ConsumerStatefulWidget {
@@ -26,7 +26,7 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     ref.read(authContollerProvider).setUserState(true);
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this)..addListener(() {});
   }
 
   @override
@@ -67,12 +67,20 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
                 color: greyColor,
               ),
             ),
-            IconButton(
-              onPressed: () {},
+            PopupMenuButton(
               icon: const Icon(
                 Icons.more_vert,
                 color: greyColor,
               ),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  onTap: () {
+                    Future(
+                        () => Navigator.pushNamed(context, createGroupScreen));
+                  },
+                  child: const Text("Create Group"),
+                ),
+              ],
             ),
           ],
           bottom: TabBar(
@@ -93,7 +101,7 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
           controller: _tabController,
           children: const [
             ContactsList(),
-            StatusScreen(),
+            StatusContactScreen(),
             Center(
               child: Text("Call Screens"),
             )
@@ -112,10 +120,9 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
             }
           },
           backgroundColor: tabColor,
-          child: const Icon(
-            Icons.comment,
-            color: Colors.white,
-          ),
+          child: _tabController.index == 0
+              ? const Icon(Icons.comment, color: Colors.white)
+              : const Icon(Icons.add, color: Colors.white),
         ),
       ),
     );
