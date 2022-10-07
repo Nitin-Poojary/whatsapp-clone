@@ -23,14 +23,15 @@ class _SelectContactsForGroupState
 
   void selectContact(int index, Contact contact) {
     if (selectContactsIndex.contains(index)) {
-      selectContactsIndex.removeAt(index);
+      selectContactsIndex.remove(index);
+      ref.read(selectedGroupContactsProvider).remove(index);
     } else {
       selectContactsIndex.add(index);
+      ref
+          .read(selectedGroupContactsProvider.state)
+          .update((state) => [...state, contact]);
     }
     setState(() {});
-    ref
-        .read(selectedGroupContactsProvider.state)
-        .update((state) => [...state, contact]);
   }
 
   @override

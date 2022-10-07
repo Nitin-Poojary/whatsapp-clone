@@ -17,10 +17,12 @@ import '../../../common/utils/colors.dart';
 class BottomChatWidget extends ConsumerStatefulWidget {
   const BottomChatWidget({
     required this.receiverUserId,
+    required this.isGroupChat,
     Key? key,
   }) : super(key: key);
 
   final String receiverUserId;
+  final bool isGroupChat;
 
   @override
   ConsumerState<BottomChatWidget> createState() => _BottomChatWidgetState();
@@ -60,18 +62,14 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
 
   void sendTextMessage() async {
     if (_isShowSendButton) {
-      ref.read(chatControllerProvider).sendTextMessage(
-          context, _messageController.text, widget.receiverUserId);
+      ref.read(chatControllerProvider).sendTextMessage(context,
+          _messageController.text, widget.receiverUserId, widget.isGroupChat);
     }
   }
 
   void sendFileMessage(File file, MessageEnum messageEnum) {
     ref.read(chatControllerProvider).sendFileMessage(
-          context,
-          file,
-          widget.receiverUserId,
-          messageEnum,
-        );
+        context, file, widget.receiverUserId, messageEnum, widget.isGroupChat);
   }
 
   void selectImage() async {
@@ -302,7 +300,10 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      onPressed: selectImage,
+                      onPressed: () {
+                        selectImage();
+                        Navigator.pop(context);
+                      },
                       icon: const Icon(
                         Icons.image,
                         color: blackColor,

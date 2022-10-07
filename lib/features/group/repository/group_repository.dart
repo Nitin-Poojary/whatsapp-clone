@@ -61,6 +61,7 @@ class GroupRepository {
         groupPic: profileUrl,
         senderId: auth.currentUser!.uid,
         memberUid: [auth.currentUser!.uid, ...uids],
+        timeSent: DateTime.now(),
       );
 
       await firestore.collection("groups").doc(groupId).set(group.toMap());

@@ -39,7 +39,10 @@ class WebScreenLayout extends StatelessWidget {
               children: [
                 const WebChatAppbarr(),
                 const Expanded(
-                  child: ChatsList(receiverUserId: "123"),
+                  child: ChatsList(
+                    receiverUserId: "123",
+                    isGroupChat: false,
+                  ),
                 ),
                 Container(
                   height: 60,
