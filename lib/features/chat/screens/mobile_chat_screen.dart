@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsappclone/features/auth/controller/auth_controller.dart';
+import 'package:whatsappclone/features/calls/controller/call_controller.dart';
 import 'package:whatsappclone/models/user_model.dart';
 import 'package:whatsappclone/features/chat/widgets/chat_list.dart';
 
@@ -19,6 +20,12 @@ class MobileChatScreen extends ConsumerWidget {
   final String uid;
   final String profilePic;
   final bool isGroupChat;
+
+  void makeCall(WidgetRef ref, BuildContext context) {
+    ref
+        .read(callControllerProvider)
+        .makeCall(context, name, uid, profilePic, isGroupChat);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -95,11 +102,11 @@ class MobileChatScreen extends ConsumerWidget {
               ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => makeCall(ref, context),
             icon: const Icon(Icons.videocam),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => makeCall(ref, context),
             icon: const Icon(Icons.call),
           ),
           IconButton(

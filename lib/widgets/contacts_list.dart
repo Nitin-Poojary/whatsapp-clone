@@ -23,7 +23,7 @@ class ContactsList extends ConsumerWidget {
               stream: ref.watch(chatControllerProvider).getChatGroupsList(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Loader();
+                  return const SizedBox();
                 } else {
                   return ListView.separated(
                     shrinkWrap: true,
