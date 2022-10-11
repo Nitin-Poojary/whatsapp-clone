@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -22,6 +23,8 @@ class CallContoller {
     required this.callRepository,
     required this.ref,
   });
+
+  Stream<DocumentSnapshot> get callStream => callRepository.callStream;
 
   void makeCall(
     BuildContext context,
@@ -55,7 +58,15 @@ class CallContoller {
         hasDialed: false,
       );
 
-      callRepository.makeCall(context, senderUserData, receiverUserData);
+      if (isGroupChat) {
+        callRepository.makeGroupCall(context, senderUserData, receiverUserData);
+      } else {
+        callRepository.makeCall(context, senderUserData, receiverUserData);
+      }
     });
+  }
+
+  void endCall(BuildContext context, String callerId, String receiverId) {
+    callRepository.endCall(context, callerId, receiverId);
   }
 }

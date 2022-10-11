@@ -20,13 +20,19 @@ class MobileScreenLayout extends ConsumerStatefulWidget {
 class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   late TabController _tabController;
+  int _tabIndex = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     ref.read(authContollerProvider).setUserState(true);
-    _tabController = TabController(length: 3, vsync: this)..addListener(() {});
+    _tabController = TabController(length: 3, vsync: this)
+      ..addListener(() {
+        if (_tabController.indexIsChanging) {
+          _tabIndex = _tabController.index;
+        }
+      });
   }
 
   @override
@@ -120,7 +126,7 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
             }
           },
           backgroundColor: tabColor,
-          child: _tabController.index == 0
+          child: _tabIndex == 0
               ? const Icon(Icons.comment, color: Colors.white)
               : const Icon(Icons.add, color: Colors.white),
         ),

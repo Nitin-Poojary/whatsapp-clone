@@ -6,6 +6,7 @@ import 'package:whatsappclone/common/widgets/error_widget.dart';
 import 'package:whatsappclone/features/auth/screens/login_screen.dart';
 import 'package:whatsappclone/features/auth/screens/otp_screen.dart';
 import 'package:whatsappclone/features/auth/screens/user_info_screen.dart';
+import 'package:whatsappclone/features/calls/screens/call_screen.dart';
 import 'package:whatsappclone/features/group/screens/create_group_screen.dart';
 import 'package:whatsappclone/features/select_contacts/screens/select_contacts_screen.dart';
 import 'package:whatsappclone/features/chat/screens/mobile_chat_screen.dart';
@@ -73,6 +74,16 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case createGroupScreen:
       return MaterialPageRoute(
         builder: (context) => const CreateGroupScreen(),
+      );
+    case callScreen:
+      final arguments = settings.arguments as Map;
+      final channelId = arguments["channelId"];
+      final call = arguments["call"];
+      final isGroupChat = arguments['isGroupChat'];
+
+      return MaterialPageRoute(
+        builder: (context) => CallScreen(
+            channelId: channelId, call: call, isGroupChat: isGroupChat),
       );
     default:
       return MaterialPageRoute(

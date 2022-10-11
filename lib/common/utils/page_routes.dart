@@ -8,6 +8,7 @@ const String statusContactScreen = '/statusContactScreen';
 const String confirmStatusScreen = "/confirmStatusScreen";
 const String statusScreen = '/statusScreen';
 const String createGroupScreen = "/createGroupScreen";
+const String callScreen = "/callScreen";
 
 // Template to create new route
 // const String  = "/";
