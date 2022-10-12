@@ -42,6 +42,13 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
     _soundRecorder = FlutterSoundRecorder();
     super.initState();
     openAudio();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        setState(() {
+          _isShowEmojiContainer = false;
+        });
+      }
+    });
   }
 
   void openAudio() async {
@@ -97,12 +104,12 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
   }
 
   void toggleEmojiContainer() {
-    _isShowEmojiContainer = true;
+    _isShowEmojiContainer = !_isShowEmojiContainer;
     setState(() {});
   }
 
   void changeKeyboardContainer() {
-    if (_focusNode.hasFocus && _isShowEmojiContainer) {
+    if (_focusNode.hasFocus) {
       _focusNode.unfocus();
     } else {
       _focusNode.requestFocus();
@@ -134,90 +141,112 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
     bool isShowMessageReply = messageReply != null;
 
     return WillPopScope(
+      onWillPop: () async {
+        if (_isShowEmojiContainer) {
+          setState(() {
+            _isShowEmojiContainer = false;
+          });
+          return false;
+        }
+        return true;
+      },
       child: Column(
         children: [
-          isShowMessageReply ? const MessageReplyPreview() : const SizedBox(),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: TextFormField(
-                    controller: _messageController,
-                    focusNode: _focusNode,
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        setState(() {
-                          _isShowSendButton = true;
-                        });
-                      } else {
-                        setState(() {
-                          _isShowSendButton = false;
-                        });
-                      }
-                    },
-                    onTap: () {
-                      _isShowEmojiContainer = true;
-                      _focusNode.requestFocus();
-                      setState(() {});
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: mobileChatBoxColor,
-                      prefixIcon: IconButton(
-                        color: greyColor,
-                        splashRadius: 10,
-                        splashColor: whiteColor,
-                        onPressed: toggelEmojiKeyboardContainer,
-                        icon: const Icon(Icons.emoji_emotions),
-                      ),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                bottomSheet(context);
-                              },
-                              icon: const Icon(
-                                Icons.attach_file_outlined,
-                                color: greyColor,
-                              ),
+                  child: Column(
+                    children: [
+                      isShowMessageReply
+                          ? const MessageReplyPreview()
+                          : const SizedBox(),
+                      TextFormField(
+                        controller: _messageController,
+                        focusNode: _focusNode,
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            setState(() {
+                              _isShowSendButton = true;
+                            });
+                          } else {
+                            setState(() {
+                              _isShowSendButton = false;
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: mobileChatBoxColor,
+                          prefixIcon: IconButton(
+                            color: greyColor,
+                            splashRadius: 10,
+                            splashColor: whiteColor,
+                            onPressed: toggelEmojiKeyboardContainer,
+                            icon: _isShowEmojiContainer
+                                ? const Icon(Icons.keyboard)
+                                : const Icon(Icons.emoji_emotions),
+                          ),
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    bottomSheet(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.attach_file_outlined,
+                                    color: greyColor,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: (() {}),
+                                  icon: const Icon(
+                                    Icons.currency_rupee_outlined,
+                                    color: greyColor,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: selectImageFromCamera,
+                                  icon: const Icon(
+                                    Icons.camera_alt,
+                                    color: greyColor,
+                                  ),
+                                ),
+                              ],
                             ),
-                            IconButton(
-                              onPressed: (() {}),
-                              icon: const Icon(
-                                Icons.currency_rupee_outlined,
-                                color: greyColor,
-                              ),
+                          ),
+                          hintText: "Message",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: const Radius.circular(20),
+                              bottomRight: const Radius.circular(20),
+                              topLeft: isShowMessageReply
+                                  ? const Radius.circular(0)
+                                  : const Radius.circular(20),
+                              topRight: isShowMessageReply
+                                  ? const Radius.circular(0)
+                                  : const Radius.circular(20),
                             ),
-                            IconButton(
-                              onPressed: selectImageFromCamera,
-                              icon: const Icon(
-                                Icons.camera_alt,
-                                color: greyColor,
-                              ),
+                            borderSide: const BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
                             ),
-                          ],
+                          ),
+                          contentPadding: const EdgeInsets.all(0),
                         ),
                       ),
-                      hintText: "Message",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.all(0),
-                    ),
+                    ],
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(right: 10, bottom: 10),
                 child: GestureDetector(
                   onTap: () {
                     if (_messageController.text.trim().isNotEmpty) {
@@ -248,33 +277,25 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
               ),
             ],
           ),
-          _isShowEmojiContainer
-              ? SizedBox(
-                  height: 255,
-                  child: EmojiPicker(
-                    onEmojiSelected: (category, emoji) {
-                      _messageController.text += emoji.emoji;
-                      if (!_isShowSendButton &&
-                          _messageController.text.isNotEmpty) {
-                        setState(() {
-                          _isShowSendButton = true;
-                        });
-                      }
-                    },
-                  ),
-                )
-              : const SizedBox.shrink(),
+          Offstage(
+            offstage: !_isShowEmojiContainer,
+            child: SizedBox(
+              height: 255,
+              child: EmojiPicker(
+                onEmojiSelected: (category, emoji) {
+                  _messageController.text += emoji.emoji;
+                  if (!_isShowSendButton &&
+                      _messageController.text.isNotEmpty) {
+                    setState(() {
+                      _isShowSendButton = true;
+                    });
+                  }
+                },
+              ),
+            ),
+          )
         ],
       ),
-      onWillPop: () async {
-        if (_isShowEmojiContainer) {
-          setState(() {
-            _isShowEmojiContainer = false;
-          });
-          return false;
-        }
-        return true;
-      },
     );
   }
 

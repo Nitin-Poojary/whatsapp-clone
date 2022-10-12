@@ -33,7 +33,6 @@ class MobileChatScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CallPickupScreen(
       scaffold: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: Container(

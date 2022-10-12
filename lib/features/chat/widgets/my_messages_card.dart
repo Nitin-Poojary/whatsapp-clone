@@ -55,30 +55,38 @@ class MyMessageCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (isReplying) ...[
-                        Text(
-                          userName,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: backgroundColor.withOpacity(0.5),
+                            color: Colors.black26,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: DisplayMessage(
-                            message: repliedText,
-                            messageType: repliedMessageType,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              DisplayMessage(
+                                message: repliedText,
+                                messageType: repliedMessageType,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 8,
-                        ),
                       ],
+                      const SizedBox(
+                        height: 5,
+                      ),
                       DisplayMessage(
                         message: message,
                         messageType: messageType,
