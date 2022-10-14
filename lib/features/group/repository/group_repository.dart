@@ -29,10 +29,11 @@ class GroupRepository {
     required this.ref,
   });
 
-  void createGroup(BuildContext context, String name, File profilePic,
+  void createGroup(BuildContext context, String name, File? profilePic,
       List<Contact> selectedContacts) async {
     try {
       List<String> uids = [];
+      String profileUrl = defaultGroupPhotoURL;
 
       for (int i = 0; i < selectedContacts.length; i++) {
         var userCollection = await firestore
@@ -50,9 +51,13 @@ class GroupRepository {
       }
       var groupId = const Uuid().v1();
 
-      String profileUrl = await ref
-          .read(commonFirebaseStorageRepositoryProvider)
-          .storeFileToFirebase('group$groupId', profilePic);
+      if (profilePic != null) {
+        profileUrl = await ref
+            .read(commonFirebaseStorageRepositoryProvider)
+            .storeFileToFirebase('group$groupId', profilePic);
+      }
+
+      String chatRoomId = const Uuid().v1();
 
       m.Group group = m.Group(
         name: name,
@@ -62,6 +67,7 @@ class GroupRepository {
         senderId: auth.currentUser!.uid,
         memberUid: [auth.currentUser!.uid, ...uids],
         timeSent: DateTime.now(),
+        chatRoomId: chatRoomId,
       );
 
       await firestore.collection("groups").doc(groupId).set(group.toMap());

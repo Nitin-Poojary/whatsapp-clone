@@ -49,12 +49,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       final String uid = arguments['uid'];
       final String profilePic = arguments['profilePic'];
       final bool isGroupChat = arguments['isGroupChat'];
+      final String chatRoomId = arguments['chatRoomId'];
       return MaterialPageRoute(
         builder: (context) => MobileChatScreen(
           name: name,
           uid: uid,
           profilePic: profilePic,
           isGroupChat: isGroupChat,
+          chatRoomId: chatRoomId,
         ),
       );
     case statusContactScreen:

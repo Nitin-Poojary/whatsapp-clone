@@ -6,6 +6,9 @@ import 'package:image_picker/image_picker.dart';
 const String defaultPhotoURL =
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 
+const String defaultGroupPhotoURL =
+    'https://cdn6.aptoide.com/imgs/1/2/2/1221bc0bdd2354b42b293317ff2adbcf_icon.png';
+
 void showSnackBar({required BuildContext context, required String content}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

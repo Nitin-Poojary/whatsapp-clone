@@ -18,11 +18,13 @@ class BottomChatWidget extends ConsumerStatefulWidget {
   const BottomChatWidget({
     required this.receiverUserId,
     required this.isGroupChat,
+    required this.chatRoomId,
     Key? key,
   }) : super(key: key);
 
   final String receiverUserId;
   final bool isGroupChat;
+  final String chatRoomId;
 
   @override
   ConsumerState<BottomChatWidget> createState() => _BottomChatWidgetState();
@@ -69,14 +71,25 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
 
   void sendTextMessage() async {
     if (_isShowSendButton) {
-      ref.read(chatControllerProvider).sendTextMessage(context,
-          _messageController.text, widget.receiverUserId, widget.isGroupChat);
+      ref.read(chatControllerProvider).sendTextMessage(
+            context,
+            _messageController.text,
+            widget.receiverUserId,
+            widget.isGroupChat,
+            widget.chatRoomId,
+          );
     }
   }
 
   void sendFileMessage(File file, MessageEnum messageEnum) {
     ref.read(chatControllerProvider).sendFileMessage(
-        context, file, widget.receiverUserId, messageEnum, widget.isGroupChat);
+          context,
+          file,
+          widget.receiverUserId,
+          messageEnum,
+          widget.isGroupChat,
+          widget.chatRoomId,
+        );
   }
 
   void selectImage() async {
@@ -205,7 +218,7 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: (() {}),
+                                  onPressed: () {},
                                   icon: const Icon(
                                     Icons.currency_rupee_outlined,
                                     color: greyColor,

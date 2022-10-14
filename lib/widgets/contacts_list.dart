@@ -20,7 +20,7 @@ class ContactsList extends ConsumerWidget {
         child: Column(
           children: [
             StreamBuilder(
-              stream: ref.watch(chatControllerProvider).getChatGroupsList(),
+              stream: ref.read(chatControllerProvider).getChatGroupsList(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox();
@@ -37,6 +37,7 @@ class ContactsList extends ConsumerWidget {
                                 "uid": group.groupId,
                                 "profilePic": group.groupPic,
                                 "isGroupChat": true,
+                                'chatRoomId': group.chatRoomId,
                               });
                         },
                         child: ListTile(
@@ -74,7 +75,7 @@ class ContactsList extends ConsumerWidget {
               },
             ),
             StreamBuilder(
-              stream: ref.watch(chatControllerProvider).getChatContacts(),
+              stream: ref.read(chatControllerProvider).getChatContacts(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Loader();
@@ -91,6 +92,7 @@ class ContactsList extends ConsumerWidget {
                                 "uid": chatContactData.contactId,
                                 "profilePic": chatContactData.profilePic,
                                 "isGroupChat": false,
+                                'chatRoomId': chatContactData.chatRoomId,
                               });
                         },
                         child: ListTile(

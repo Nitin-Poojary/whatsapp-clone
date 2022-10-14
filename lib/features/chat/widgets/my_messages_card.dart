@@ -56,6 +56,7 @@ class MyMessageCard extends StatelessWidget {
                     children: [
                       if (isReplying) ...[
                         Container(
+                          alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.black26,

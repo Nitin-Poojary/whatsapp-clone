@@ -43,6 +43,7 @@ class SelectContactsRepository {
             'name': userData.name,
             'uid': userData.uid,
             'profilePic': userData.profilePic,
+            'isGroupChat': false,
           });
         }
       }

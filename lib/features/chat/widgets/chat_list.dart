@@ -13,11 +13,16 @@ import 'my_messages_card.dart';
 import 'sender_message_card.dart';
 
 class ChatsList extends ConsumerStatefulWidget {
-  const ChatsList(
-      {required this.isGroupChat, required this.receiverUserId, super.key});
+  const ChatsList({
+    required this.isGroupChat,
+    required this.receiverUserId,
+    required this.chatRoomId,
+    super.key,
+  });
 
   final String receiverUserId;
   final bool isGroupChat;
+  final String chatRoomId;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatsListState();
 }
@@ -49,10 +54,8 @@ class _ChatsListState extends ConsumerState<ChatsList> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: widget.isGroupChat
-          ? ref.read(chatControllerProvider).getGroupChat(widget.receiverUserId)
-          : ref
-              .read(chatControllerProvider)
-              .getChatLists(widget.receiverUserId),
+          ? ref.read(chatControllerProvider).getGroupChat(widget.chatRoomId)
+          : ref.read(chatControllerProvider).getChatLists(widget.chatRoomId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Loader();
@@ -60,7 +63,7 @@ class _ChatsListState extends ConsumerState<ChatsList> {
 
         SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
           _chatScrollController
-              .jumpTo(_chatScrollController.position.maxScrollExtent + 20);
+              .jumpTo(_chatScrollController.position.maxScrollExtent);
         });
 
         return ListView.builder(
@@ -72,7 +75,11 @@ class _ChatsListState extends ConsumerState<ChatsList> {
                 messageData.receiverId ==
                     FirebaseAuth.instance.currentUser!.uid) {
               ref.read(chatControllerProvider).setChatMessageSeen(
-                  context, widget.receiverUserId, messageData.messageId);
+                    context,
+                    widget.receiverUserId,
+                    messageData.messageId,
+                    widget.chatRoomId,
+                  );
             }
             if (messageData.senderId ==
                 FirebaseAuth.instance.currentUser!.uid) {
@@ -100,7 +107,7 @@ class _ChatsListState extends ConsumerState<ChatsList> {
               repliedMessageType: messageData.repliedMessageType,
               onRightSwipe: () => onMessageSwipe(
                 messageData.text,
-                true,
+                false,
                 messageData.type,
               ),
             );

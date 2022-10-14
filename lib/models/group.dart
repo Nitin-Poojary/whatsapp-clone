@@ -6,6 +6,7 @@ class Group {
   final String senderId;
   final List<String> memberUid;
   final DateTime timeSent;
+  final String chatRoomId;
 
   Group({
     required this.name,
@@ -15,6 +16,7 @@ class Group {
     required this.senderId,
     required this.memberUid,
     required this.timeSent,
+    required this.chatRoomId,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,6 +29,7 @@ class Group {
     result.addAll({'senderId': senderId});
     result.addAll({'memberUid': memberUid});
     result.addAll({'timeSent': timeSent.millisecondsSinceEpoch});
+    result.addAll({'chatRoomId': chatRoomId});
 
     return result;
   }
@@ -40,6 +43,7 @@ class Group {
       senderId: map['senderId'] ?? '',
       memberUid: List<String>.from(map['memberUid']),
       timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
+      chatRoomId: map['chatRoomId'] ?? '',
     );
   }
 }

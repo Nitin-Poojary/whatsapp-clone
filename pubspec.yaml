@@ -39,6 +39,7 @@ dependencies:
   emoji_picker_flutter: ^1.4.0
   firebase_auth: ^3.10.0
   firebase_core: ^1.23.0
+  firebase_database: ^9.1.7
   firebase_storage: ^10.3.9
   flutter:
     sdk: flutter

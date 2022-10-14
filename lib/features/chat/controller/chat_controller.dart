@@ -33,6 +33,7 @@ class ChatContoller {
     String text,
     String receiverUserId,
     bool isGroupChat,
+    String chatRoomId,
   ) {
     final messageReply = ref.read(messageReplyProvider);
     ref
@@ -44,6 +45,7 @@ class ChatContoller {
               senderUser: value!,
               messageReply: messageReply,
               isGroupChat: isGroupChat,
+              chatRoomId: chatRoomId,
             ));
     ref.read(messageReplyProvider.state).update((state) => null);
   }
@@ -56,12 +58,12 @@ class ChatContoller {
     return chatRepository.getChatGroupsList();
   }
 
-  Stream<List<Message>> getChatLists(String receiverId) {
-    return chatRepository.getChats(receiverId);
+  Stream<List<Message>> getChatLists(String chatRoomId) {
+    return chatRepository.getChats(chatRoomId);
   }
 
-  Stream<List<Message>> getGroupChat(String groupId) {
-    return chatRepository.getGroupChats(groupId);
+  Stream<List<Message>> getGroupChat(String chatRoomId) {
+    return chatRepository.getGroupChats(chatRoomId);
   }
 
   void sendFileMessage(
@@ -70,6 +72,7 @@ class ChatContoller {
     String receiverUserId,
     MessageEnum messageEnum,
     bool isGroupChat,
+    String chatRoomId,
   ) {
     final messageReply = ref.read(messageReplyProvider);
     ref.read(userDataAuthProvider).whenData(
@@ -82,12 +85,18 @@ class ChatContoller {
             ref: ref,
             messageReply: messageReply,
             isGroupChat: isGroupChat,
+            chatRoomId: chatRoomId,
           ),
         );
   }
 
-  void setChatMessageSeen(
-      BuildContext context, String receiverUserId, String messageId) async {
-    chatRepository.setChatMessageSeen(context, receiverUserId, messageId);
+  void setChatMessageSeen(BuildContext context, String receiverUserId,
+      String messageId, String chatRoomId) async {
+    chatRepository.setChatMessageSeen(
+      context,
+      receiverUserId,
+      messageId,
+      chatRoomId,
+    );
   }
 }

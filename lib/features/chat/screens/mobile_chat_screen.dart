@@ -16,12 +16,14 @@ class MobileChatScreen extends ConsumerWidget {
     required this.uid,
     required this.profilePic,
     required this.isGroupChat,
+    required this.chatRoomId,
   });
 
   final String name;
   final String uid;
   final String profilePic;
   final bool isGroupChat;
+  final String chatRoomId;
 
   void makeCall(WidgetRef ref, BuildContext context) {
     ref
@@ -81,7 +83,9 @@ class MobileChatScreen extends ConsumerWidget {
                           child: Text(
                             name,
                             style: const TextStyle(
-                                overflow: TextOverflow.ellipsis),
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 18,
+                            ),
                           ),
                         )
                       : StreamBuilder<UserModel>(
@@ -174,11 +178,13 @@ class MobileChatScreen extends ConsumerWidget {
               child: ChatsList(
                 receiverUserId: uid,
                 isGroupChat: isGroupChat,
+                chatRoomId: chatRoomId,
               ),
             ),
             BottomChatWidget(
               receiverUserId: uid,
               isGroupChat: isGroupChat,
+              chatRoomId: chatRoomId,
             ),
           ],
         ),
