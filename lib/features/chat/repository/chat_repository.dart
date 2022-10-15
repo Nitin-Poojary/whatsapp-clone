@@ -104,6 +104,7 @@ class ChatRepository {
     DateTime timeSent,
     String receiverUserId,
     bool isGroupChat,
+    String chatRoomId,
   ) async {
     if (isGroupChat) {
       await firestore.collection("groups").doc(receiverUserId).update(
@@ -141,7 +142,6 @@ class ChatRepository {
           'timeSent': timeSent.millisecondsSinceEpoch
         });
       } else {
-        String chatRoomId = const Uuid().v1();
         var recieverChatContact = ChatContact(
           name: senderUserData.name,
           profilePic: senderUserData.profilePic,
@@ -247,7 +247,7 @@ class ChatRepository {
       String messageId = const Uuid().v1();
 
       await _saveDataToContactsSubcollection(senderUser, receiverUserData, text,
-          timeSent, receiverUserId, isGroupChat);
+          timeSent, receiverUserId, isGroupChat, chatRoomId);
 
       _saveMessageToMessageSubCollection(
         receiverUserId: receiverUserId,
@@ -318,7 +318,7 @@ class ChatRepository {
       }
 
       _saveDataToContactsSubcollection(senderUserData, receiverUserData,
-          contactMsg, timeSent, receiverUserId, isGroupChat);
+          contactMsg, timeSent, receiverUserId, isGroupChat, chatRoomId);
 
       _saveMessageToMessageSubCollection(
         receiverUserId: receiverUserId,

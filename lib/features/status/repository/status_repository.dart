@@ -127,10 +127,12 @@ class StatusRepository {
             )
             .get();
 
-        for (var tempData in statusesSnapshot.docs) {
-          Status tempStatus = Status.fromMap(tempData.data());
-          if (tempStatus.whoCanSee.contains(auth.currentUser!.uid)) {
-            statusData.add(tempStatus);
+        if (statusesSnapshot.docs.isNotEmpty) {
+          for (var tempData in statusesSnapshot.docs) {
+            Status tempStatus = Status.fromMap(tempData.data());
+            if (tempStatus.whoCanSee.contains(auth.currentUser!.uid)) {
+              statusData.add(tempStatus);
+            }
           }
         }
       }

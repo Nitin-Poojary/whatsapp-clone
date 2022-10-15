@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 import 'package:whatsappclone/common/utils/page_routes.dart';
 import 'package:whatsappclone/common/utils/utils.dart';
+import 'package:whatsappclone/models/chat_contact.dart';
 import 'package:whatsappclone/models/user_model.dart';
 
 final selectContactsRepository = Provider(
@@ -39,11 +42,29 @@ class SelectContactsRepository {
 
         if (selectedPhoneNumber == userData.phoneNumber) {
           isFound = true;
+
+          var chatContactData = await firestore
+              .collection("users")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .collection("chats")
+              .doc(userData.uid)
+              .get();
+
+          String chatRoomId;
+
+          if (chatContactData.exists) {
+            chatRoomId =
+                ChatContact.fromMap(chatContactData.data()!).chatRoomId;
+          } else {
+            chatRoomId = const Uuid().v1();
+          }
+
           Navigator.pushNamed(context, mobileChatScreen, arguments: {
             'name': userData.name,
             'uid': userData.uid,
             'profilePic': userData.profilePic,
             'isGroupChat': false,
+            'chatRoomId': chatRoomId,
           });
         }
       }
