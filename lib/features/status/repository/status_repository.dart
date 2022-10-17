@@ -30,6 +30,22 @@ class StatusRepository {
     required this.ref,
   });
 
+  Future<List<String>> getUidWhoCanSee(List<Contact> contacts) async {
+    List<String> uidWhoCanSee = [];
+    for (int i = 0; i < contacts.length; i++) {
+      var userData = await firestore
+          .collection('users')
+          .where('phoneNumber',
+              isEqualTo: contacts[i].phones[0].number.replaceAll(" ", ''))
+          .get();
+      if (userData.docs.isNotEmpty) {
+        UserModel userModel = UserModel.fromMap(userData.docs[0].data());
+        uidWhoCanSee.add(userModel.uid);
+      }
+    }
+    return uidWhoCanSee;
+  }
+
   void uploadStatus({
     required String userName,
     required String profilePic,
@@ -50,19 +66,7 @@ class StatusRepository {
         contacts = await FlutterContacts.getContacts(withProperties: true);
       }
 
-      List<String> uidWhoCanSee = [];
-
-      for (int i = 0; i < contacts.length; i++) {
-        var userData = await firestore
-            .collection('users')
-            .where('phoneNumber',
-                isEqualTo: contacts[i].phones[0].number.replaceAll(" ", ''))
-            .get();
-        if (userData.docs.isNotEmpty) {
-          UserModel userModel = UserModel.fromMap(userData.docs[0].data());
-          uidWhoCanSee.add(userModel.uid);
-        }
-      }
+      List<String> uidWhoCanSee = await getUidWhoCanSee(contacts);
 
       List<String> statusImageUrls = [];
       var statusesSnapshot = await firestore
