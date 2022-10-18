@@ -23,7 +23,7 @@ class GroupContoller {
     required this.ref,
   });
 
-  void createGroup(BuildContext context, String name, File profilePic,
+  void createGroup(BuildContext context, String name, File? profilePic,
       List<Contact> selectedContacts) {
     groupRepository.createGroup(context, name, profilePic, selectedContacts);
   }

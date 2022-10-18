@@ -158,13 +158,15 @@ class MobileChatScreen extends ConsumerWidget {
                       color: whiteColor,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () => makeNormalCall(ref),
-                    icon: const Icon(
-                      Icons.call,
-                      color: whiteColor,
-                    ),
-                  ),
+                  isGroupChat
+                      ? const SizedBox.shrink()
+                      : IconButton(
+                          onPressed: () => makeNormalCall(ref),
+                          icon: const Icon(
+                            Icons.call,
+                            color: whiteColor,
+                          ),
+                        ),
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(

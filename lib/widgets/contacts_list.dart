@@ -42,6 +42,7 @@ class ContactsList extends ConsumerWidget {
                         },
                         child: ListTile(
                           leading: CircleAvatar(
+                            radius: 23,
                             backgroundImage: NetworkImage(
                               group.groupPic,
                             ),
@@ -97,6 +98,7 @@ class ContactsList extends ConsumerWidget {
                         },
                         child: ListTile(
                           leading: CircleAvatar(
+                            radius: 23,
                             backgroundImage: NetworkImage(
                               chatContactData.profilePic,
                             ),

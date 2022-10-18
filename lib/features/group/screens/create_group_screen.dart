@@ -40,7 +40,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
       ref.read(groupControllerProvider).createGroup(
             context,
             _groupNameContoller.text.trim(),
-            image!,
+            image,
             ref.read(selectedGroupContactsProvider),
           );
       ref.read(selectedGroupContactsProvider.state).update((state) => []);
@@ -57,6 +57,9 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(
+            height: 20,
+          ),
           Center(
             child: Stack(
               children: [
