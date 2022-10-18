@@ -33,8 +33,7 @@ class StatusContoller {
     });
   }
 
-  Future<List<Status>> getStatus(BuildContext context) async {
-    List<Status> statuses = await statusRepository.getStatus(context);
-    return statuses;
+  Stream<List<Status>> getStatus(BuildContext context) {
+    return statusRepository.getStatus(context);
   }
 }

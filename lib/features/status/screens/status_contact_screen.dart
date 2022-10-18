@@ -13,8 +13,8 @@ class StatusContactScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: FutureBuilder<List<Status>>(
-        future: ref.read(statusControllerProvider).getStatus(context),
+      body: StreamBuilder<List<Status>>(
+        stream: ref.read(statusControllerProvider).getStatus(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Loader();

@@ -101,48 +101,67 @@ class StatusRepository {
         whoCanSee: uidWhoCanSee,
       );
 
-      await firestore.collection("status").doc(statusId).set(status.toMap());
+      await firestore.collection("status").doc(uid).set(status.toMap());
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }
   }
 
-  Future<List<Status>> getStatus(BuildContext context) async {
-    List<Status> statusData = [];
-    try {
-      List<Contact> contacts = [];
+  Future<void> updateUidWhoCanSee() async {
+    List<Contact> contacts = [];
+    List<String> uidWhoCanSee = [];
 
-      if (await FlutterContacts.requestPermission()) {
-        contacts = await FlutterContacts.getContacts(withProperties: true);
+    if (await FlutterContacts.requestPermission()) {
+      contacts = await FlutterContacts.getContacts(withProperties: true);
+    }
+
+    for (int i = 0; i < contacts.length; i++) {
+      var userData = await firestore
+          .collection('users')
+          .where('phoneNumber',
+              isEqualTo: contacts[i].phones[0].number.replaceAll(" ", ''))
+          .get();
+      if (userData.docs.isNotEmpty) {
+        UserModel userModel = UserModel.fromMap(userData.docs[0].data());
+        uidWhoCanSee.add(userModel.uid);
       }
+    }
 
-      for (int i = 0; i < contacts.length; i++) {
-        var statusesSnapshot = await firestore
-            .collection("status")
-            .where(
-              'phoneNumber',
-              isEqualTo: contacts[i].phones[0].number.replaceAll(" ", ''),
-            )
-            .where(
-              "createdAt",
-              isGreaterThan: DateTime.now()
-                  .subtract(const Duration(hours: 24))
-                  .millisecondsSinceEpoch,
-            )
-            .get();
+    await firestore.collection("status").doc(auth.currentUser!.uid).update({
+      "whoCanSee": uidWhoCanSee,
+    });
+  }
 
-        if (statusesSnapshot.docs.isNotEmpty) {
-          for (var tempData in statusesSnapshot.docs) {
-            Status tempStatus = Status.fromMap(tempData.data());
-            if (tempStatus.whoCanSee.contains(auth.currentUser!.uid)) {
-              statusData.add(tempStatus);
-            }
+  Stream<List<Status>> getStatus(BuildContext context) {
+    updateUidWhoCanSee();
+
+    return firestore
+        .collection('status')
+        .where('uid', isEqualTo: auth.currentUser!.uid)
+        .snapshots()
+        .asyncMap((event) async {
+      if (event.docs.isNotEmpty) {
+        Status statusData = Status.fromMap(event.docs[0].data());
+        List<String> uidWhoCanSee = statusData.whoCanSee;
+        List<Status> displayStatus = [];
+        displayStatus.add(statusData);
+
+        for (int i = 0; i < uidWhoCanSee.length; i++) {
+          var status = await firestore
+              .collection('status')
+              .where('uid', isEqualTo: uidWhoCanSee[i])
+              .where('createdAt',
+                  isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+              .get();
+
+          if (status.docs.isNotEmpty) {
+            displayStatus.add(Status.fromMap(status.docs[0].data()));
           }
         }
+        return displayStatus;
+      } else {
+        return [];
       }
-    } catch (e) {
-      showSnackBar(context: context, content: e.toString());
-    }
-    return statusData;
+    });
   }
 }
