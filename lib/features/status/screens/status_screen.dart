@@ -50,6 +50,7 @@ class _StatusScreenState extends State<StatusScreen> {
                   Navigator.pop(context);
                 }
               },
+              onComplete: () => Navigator.pop(context),
             ),
     );
   }

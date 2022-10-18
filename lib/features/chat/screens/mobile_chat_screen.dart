@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsappclone/common/utils/colors.dart';
 import 'package:whatsappclone/features/calls/controller/call_controller.dart';
 import 'package:whatsappclone/features/calls/screens/call_pickup_screen.dart';
+import 'package:whatsappclone/features/chat/controller/chat_controller.dart';
 
 import '../../../models/user_model.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -29,6 +30,10 @@ class MobileChatScreen extends ConsumerWidget {
     ref
         .read(callControllerProvider)
         .makeCall(context, name, uid, profilePic, isGroupChat);
+  }
+
+  void makeNormalCall(WidgetRef ref) {
+    ref.read(chatControllerProvider).makeNormalCall(uid);
   }
 
   @override
@@ -154,14 +159,14 @@ class MobileChatScreen extends ConsumerWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () => makeCall(ref, context),
+                    onPressed: () => makeNormalCall(ref),
                     icon: const Icon(
                       Icons.call,
                       color: whiteColor,
                     ),
                   ),
                   IconButton(
-                    onPressed: () => makeCall(ref, context),
+                    onPressed: () {},
                     icon: const Icon(
                       Icons.more_vert,
                       color: whiteColor,

@@ -99,4 +99,8 @@ class ChatContoller {
       chatRoomId,
     );
   }
+
+  void makeNormalCall(String uid) {
+    chatRepository.makeNormalCall(uid);
+  }
 }

@@ -39,12 +39,12 @@ dependencies:
   emoji_picker_flutter: ^1.4.0
   firebase_auth: ^3.10.0
   firebase_core: ^1.23.0
-  firebase_database: ^9.1.7
   firebase_storage: ^10.3.9
   flutter:
     sdk: flutter
   flutter_contacts: ^1.1.5
   flutter_launcher_icons: ^0.10.0
+  flutter_phone_direct_caller: ^2.1.1
   flutter_riverpod: ^1.0.4
   flutter_sound: ^9.2.13
   image_picker: ^0.8.5+3
