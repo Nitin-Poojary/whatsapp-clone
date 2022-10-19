@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:whatsappclone/common/enums/message_enum.dart';
@@ -357,12 +356,5 @@ class ChatRepository {
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }
-  }
-
-  void makeNormalCall(String uid) async {
-    var userData = await firestore.collection('users').doc(uid).get();
-
-    String number = UserModel.fromMap(userData.data()!).phoneNumber;
-    await FlutterPhoneDirectCaller.callNumber(number);
   }
 }

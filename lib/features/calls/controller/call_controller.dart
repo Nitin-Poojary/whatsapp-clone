@@ -32,6 +32,7 @@ class CallContoller {
     String receiverUid,
     String receiverProfilePic,
     bool isGroupChat,
+    bool isVideoCall,
   ) {
     ref.read(userDataAuthProvider).whenData((value) {
       String callId = const Uuid().v1();
@@ -45,6 +46,7 @@ class CallContoller {
         receiverPic: receiverProfilePic,
         callId: callId,
         hasDialed: true,
+        isVideoCall: isVideoCall,
       );
 
       CallModel receiverUserData = CallModel(
@@ -56,6 +58,7 @@ class CallContoller {
         receiverPic: receiverProfilePic,
         callId: callId,
         hasDialed: false,
+        isVideoCall: isVideoCall,
       );
 
       if (isGroupChat) {
@@ -63,6 +66,45 @@ class CallContoller {
       } else {
         callRepository.makeCall(context, senderUserData, receiverUserData);
       }
+    });
+  }
+
+  void makeNormalCall(
+    BuildContext context,
+    String receiverName,
+    String receiverUid,
+    String receiverProfilePic,
+    bool isGroupChat,
+    bool isVideoCall,
+  ) {
+    ref.read(userDataAuthProvider).whenData((value) {
+      String callId = const Uuid().v1();
+
+      CallModel senderUserData = CallModel(
+        callerId: value!.uid,
+        callerName: value.name,
+        callerPic: value.profilePic,
+        receiverId: receiverUid,
+        receiverName: receiverName,
+        receiverPic: receiverProfilePic,
+        callId: callId,
+        hasDialed: true,
+        isVideoCall: isVideoCall,
+      );
+
+      CallModel receiverUserData = CallModel(
+        callerId: value.uid,
+        callerName: value.name,
+        callerPic: value.profilePic,
+        receiverId: receiverUid,
+        receiverName: receiverName,
+        receiverPic: receiverProfilePic,
+        callId: callId,
+        hasDialed: false,
+        isVideoCall: isVideoCall,
+      );
+
+      callRepository.makeNormalCall(context, senderUserData, receiverUserData);
     });
   }
 

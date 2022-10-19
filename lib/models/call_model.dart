@@ -7,6 +7,7 @@ class CallModel {
   final String receiverPic;
   final String callId;
   final bool hasDialed;
+  final bool isVideoCall;
 
   CallModel({
     required this.callerId,
@@ -17,6 +18,7 @@ class CallModel {
     required this.receiverPic,
     required this.callId,
     required this.hasDialed,
+    required this.isVideoCall,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +32,7 @@ class CallModel {
     result.addAll({'receiverPic': receiverPic});
     result.addAll({'callId': callId});
     result.addAll({'hasDialed': hasDialed});
+    result.addAll({'isVideoCall': isVideoCall});
 
     return result;
   }
@@ -44,6 +47,7 @@ class CallModel {
       receiverPic: map['receiverPic'] ?? '',
       callId: map['callId'] ?? '',
       hasDialed: map['hasDialed'] ?? false,
+      isVideoCall: map['isVideoCall'] ?? false,
     );
   }
 }
