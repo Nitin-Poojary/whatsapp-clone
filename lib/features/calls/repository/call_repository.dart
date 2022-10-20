@@ -187,7 +187,23 @@ class CallRepository {
   }
 
   Stream<List<CallModel>> getCallHistory() {
-    firestore.collection('calls').snapshots();
+    return firestore
+        .collection('calls')
+        .doc(auth.currentUser!.uid)
+        .snapshots()
+        .map((event) {
+      if (event.exists) {
+        List<CallModel> callHistoryData = [];
+        var callHistorySnapshot = event.data()!['callHistory'];
+
+        for (var callHistoryModel in callHistorySnapshot) {
+          callHistoryData.add(CallModel.fromMap(callHistoryModel));
+        }
+        return callHistoryData.reversed.toList();
+      } else {
+        return [];
+      }
+    });
   }
 
   void endCall(

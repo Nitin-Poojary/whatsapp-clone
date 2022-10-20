@@ -7,6 +7,7 @@ import 'package:whatsappclone/common/utils/colors.dart';
 import 'package:whatsappclone/common/utils/page_routes.dart';
 import 'package:whatsappclone/common/utils/utils.dart';
 import 'package:whatsappclone/features/auth/controller/auth_controller.dart';
+import 'package:whatsappclone/features/calls/screens/call_history_screen.dart';
 import 'package:whatsappclone/features/status/screens/status_contact_screen.dart';
 import 'package:whatsappclone/widgets/contacts_list.dart';
 
@@ -108,9 +109,7 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
           children: const [
             ContactsList(),
             StatusContactScreen(),
-            Center(
-              child: Text("Call Screens"),
-            )
+            CallHistoryScreen(),
           ],
         ),
         floatingActionButton: FloatingActionButton(

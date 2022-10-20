@@ -8,6 +8,7 @@ class CallModel {
   final String callId;
   final bool hasDialed;
   final bool isVideoCall;
+  final DateTime timeCalled;
 
   CallModel({
     required this.callerId,
@@ -19,6 +20,7 @@ class CallModel {
     required this.callId,
     required this.hasDialed,
     required this.isVideoCall,
+    required this.timeCalled,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,6 +35,7 @@ class CallModel {
     result.addAll({'callId': callId});
     result.addAll({'hasDialed': hasDialed});
     result.addAll({'isVideoCall': isVideoCall});
+    result.addAll({'timeSent': timeCalled.millisecondsSinceEpoch});
 
     return result;
   }
@@ -48,6 +51,7 @@ class CallModel {
       callId: map['callId'] ?? '',
       hasDialed: map['hasDialed'] ?? false,
       isVideoCall: map['isVideoCall'] ?? false,
+      timeCalled: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
     );
   }
 }

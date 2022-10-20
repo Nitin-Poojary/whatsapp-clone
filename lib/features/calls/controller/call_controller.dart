@@ -47,6 +47,7 @@ class CallContoller {
         callId: callId,
         hasDialed: true,
         isVideoCall: isVideoCall,
+        timeCalled: DateTime.now(),
       );
 
       CallModel receiverUserData = CallModel(
@@ -59,6 +60,7 @@ class CallContoller {
         callId: callId,
         hasDialed: false,
         isVideoCall: isVideoCall,
+        timeCalled: DateTime.now(),
       );
 
       if (isGroupChat) {
@@ -90,6 +92,7 @@ class CallContoller {
         callId: callId,
         hasDialed: true,
         isVideoCall: isVideoCall,
+        timeCalled: DateTime.now(),
       );
 
       CallModel receiverUserData = CallModel(
@@ -102,10 +105,15 @@ class CallContoller {
         callId: callId,
         hasDialed: false,
         isVideoCall: isVideoCall,
+        timeCalled: DateTime.now(),
       );
 
       callRepository.makeNormalCall(context, senderUserData, receiverUserData);
     });
+  }
+
+  Stream<List<CallModel>> getCallHistory() {
+    return callRepository.getCallHistory();
   }
 
   void endCall(BuildContext context, String callerId, String receiverId) {
