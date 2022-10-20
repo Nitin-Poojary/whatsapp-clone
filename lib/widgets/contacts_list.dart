@@ -9,11 +9,22 @@ import 'package:whatsappclone/models/group.dart';
 
 import '../models/chat_contact.dart';
 
-class ContactsList extends ConsumerWidget {
+class ContactsList extends ConsumerStatefulWidget {
   const ContactsList({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _ContactsListState();
+}
+
+class _ContactsListState extends ConsumerState<ContactsList>
+    with AutomaticKeepAliveClientMixin<ContactsList> {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: SingleChildScrollView(

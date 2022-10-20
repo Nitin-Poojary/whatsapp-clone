@@ -22,6 +22,7 @@ class _StatusContactScreenState extends ConsumerState<StatusContactScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 10.0),

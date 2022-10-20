@@ -7,11 +7,23 @@ import 'package:whatsappclone/models/call_model.dart';
 
 import '../../../common/utils/colors.dart';
 
-class CallHistoryScreen extends ConsumerWidget {
+class CallHistoryScreen extends ConsumerStatefulWidget {
   const CallHistoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CallHistoryScreenState();
+}
+
+class _CallHistoryScreenState extends ConsumerState<CallHistoryScreen>
+    with AutomaticKeepAliveClientMixin<CallHistoryScreen> {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: StreamBuilder(
