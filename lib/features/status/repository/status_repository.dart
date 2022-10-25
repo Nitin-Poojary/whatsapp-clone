@@ -71,7 +71,7 @@ class StatusRepository {
       List<String> statusImageUrls = [];
       var statusesSnapshot = await firestore
           .collection("status")
-          .where('uid', isEqualTo: auth.currentUser!.uid)
+          .where('phoneNumber', isEqualTo: phoneNumber)
           .get();
 
       if (statusesSnapshot.docs.isNotEmpty) {
@@ -127,9 +127,21 @@ class StatusRepository {
       }
     }
 
-    await firestore.collection("status").doc(auth.currentUser!.uid).update({
-      "whoCanSee": uidWhoCanSee,
-    });
+    var statusData =
+        await firestore.collection("status").doc(auth.currentUser!.uid).get();
+
+    if (statusData.exists) {
+      await firestore.collection("status").doc(auth.currentUser!.uid).update({
+        "whoCanSee": uidWhoCanSee,
+      });
+    } else {
+      await firestore.collection('status').doc(auth.currentUser!.uid).set({
+        'uid': auth.currentUser!.uid,
+        'photoUrl': [],
+        'createdAt': DateTime.now().millisecondsSinceEpoch,
+        "whoCanSee": uidWhoCanSee,
+      });
+    }
   }
 
   Stream<List<Status>> getStatus(BuildContext context) {
@@ -144,14 +156,21 @@ class StatusRepository {
         Status statusData = Status.fromMap(event.docs[0].data());
         List<String> uidWhoCanSee = statusData.whoCanSee;
         List<Status> displayStatus = [];
-        displayStatus.add(statusData);
+
+        if (statusData.userName != '') {
+          displayStatus.add(statusData);
+        }
 
         for (int i = 0; i < uidWhoCanSee.length; i++) {
           var status = await firestore
               .collection('status')
               .where('uid', isEqualTo: uidWhoCanSee[i])
-              .where('createdAt',
-                  isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+              .where(
+                'createdAt',
+                isGreaterThan: DateTime.now()
+                    .subtract(const Duration(hours: 24))
+                    .millisecondsSinceEpoch,
+              )
               .get();
 
           if (status.docs.isNotEmpty) {
