@@ -40,6 +40,7 @@ class WebScreenLayout extends StatelessWidget {
                     receiverUserId: "123",
                     isGroupChat: false,
                     chatRoomId: '',
+                    membersLength: 1,
                   ),
                 ),
                 Container(

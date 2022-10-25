@@ -193,7 +193,7 @@ class ChatRepository {
   }) async {
     final message = Message(
       senderId: auth.currentUser!.uid,
-      receiverId: receiverUserId,
+      receiverId: [receiverUserId],
       text: text,
       type: messageType,
       messageId: messageId,
@@ -340,19 +340,46 @@ class ChatRepository {
     }
   }
 
-  void setChatMessageSeen(
-    BuildContext context,
-    String receiverUserId,
-    String messageId,
-    String chatRoomId,
-  ) async {
+  void setChatMessageSeen({
+    required BuildContext context,
+    required List<String> receiverUserId,
+    required int membersLength,
+    required String viewerId,
+    required String messageId,
+    required String chatRoomId,
+    required bool isGroupChat,
+  }) async {
     try {
-      await firestore
-          .collection("chatMessages")
-          .doc("personalChats")
-          .collection(chatRoomId)
-          .doc(messageId)
-          .update({'isSeen': true});
+      if (!isGroupChat) {
+        await firestore
+            .collection("chatMessages")
+            .doc("personalChats")
+            .collection(chatRoomId)
+            .doc(messageId)
+            .update({'isSeen': true});
+      } else {
+        receiverUserId.add(viewerId);
+        if (membersLength == receiverUserId.length) {
+          await firestore
+              .collection("chatMessages")
+              .doc('groupChats')
+              .collection(chatRoomId)
+              .doc(messageId)
+              .update({
+            'isSeen': true,
+            'receiverId': receiverUserId,
+          });
+        } else {
+          await firestore
+              .collection("chatMessages")
+              .doc('groupChats')
+              .collection(chatRoomId)
+              .doc(messageId)
+              .update({
+            'receiverId': receiverUserId,
+          });
+        }
+      }
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }

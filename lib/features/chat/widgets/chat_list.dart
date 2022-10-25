@@ -17,12 +17,15 @@ class ChatsList extends ConsumerStatefulWidget {
     required this.isGroupChat,
     required this.receiverUserId,
     required this.chatRoomId,
+    required this.membersLength,
     super.key,
   });
 
   final String receiverUserId;
   final bool isGroupChat;
   final String chatRoomId;
+  final int membersLength;
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatsListState();
 }
@@ -72,13 +75,29 @@ class _ChatsListState extends ConsumerState<ChatsList> {
           itemBuilder: (context, index) {
             final Message messageData = snapshot.data![index];
             if (!messageData.isSeen &&
-                messageData.receiverId ==
+                widget.isGroupChat &&
+                messageData.senderId !=
                     FirebaseAuth.instance.currentUser!.uid) {
               ref.read(chatControllerProvider).setChatMessageSeen(
                     context,
-                    widget.receiverUserId,
+                    [widget.receiverUserId],
                     messageData.messageId,
                     widget.chatRoomId,
+                    widget.isGroupChat,
+                    widget.membersLength,
+                    FirebaseAuth.instance.currentUser!.uid,
+                  );
+            } else if (!widget.isGroupChat &&
+                messageData.receiverId[0] ==
+                    FirebaseAuth.instance.currentUser!.uid) {
+              ref.read(chatControllerProvider).setChatMessageSeen(
+                    context,
+                    [widget.receiverUserId],
+                    messageData.messageId,
+                    widget.chatRoomId,
+                    widget.isGroupChat,
+                    widget.membersLength,
+                    FirebaseAuth.instance.currentUser!.uid,
                   );
             }
             if (messageData.senderId ==

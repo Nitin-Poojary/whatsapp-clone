@@ -50,6 +50,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       final String profilePic = arguments['profilePic'];
       final bool isGroupChat = arguments['isGroupChat'];
       final String chatRoomId = arguments['chatRoomId'];
+      final int groupMembers = arguments['groupMembers'];
       return MaterialPageRoute(
         builder: (context) => MobileChatScreen(
           name: name,
@@ -57,6 +58,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           profilePic: profilePic,
           isGroupChat: isGroupChat,
           chatRoomId: chatRoomId,
+          membersLength: groupMembers,
         ),
       );
     case statusContactScreen:

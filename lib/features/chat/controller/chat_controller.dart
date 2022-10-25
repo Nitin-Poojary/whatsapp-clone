@@ -90,13 +90,22 @@ class ChatContoller {
         );
   }
 
-  void setChatMessageSeen(BuildContext context, String receiverUserId,
-      String messageId, String chatRoomId) async {
+  void setChatMessageSeen(
+      BuildContext context,
+      List<String> receiverUserId,
+      String messageId,
+      String chatRoomId,
+      bool isGroupChat,
+      int membersLength,
+      String senderId) async {
     chatRepository.setChatMessageSeen(
-      context,
-      receiverUserId,
-      messageId,
-      chatRoomId,
+      context: context,
+      chatRoomId: chatRoomId,
+      isGroupChat: isGroupChat,
+      membersLength: membersLength,
+      messageId: messageId,
+      receiverUserId: receiverUserId,
+      viewerId: senderId,
     );
   }
 }

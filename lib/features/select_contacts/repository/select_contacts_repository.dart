@@ -65,6 +65,7 @@ class SelectContactsRepository {
             'profilePic': userData.profilePic,
             'isGroupChat': false,
             'chatRoomId': chatRoomId,
+            'groupMembers': 0,
           });
         }
       }

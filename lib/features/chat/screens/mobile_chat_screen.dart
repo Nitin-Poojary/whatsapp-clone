@@ -17,6 +17,7 @@ class MobileChatScreen extends ConsumerWidget {
     required this.profilePic,
     required this.isGroupChat,
     required this.chatRoomId,
+    required this.membersLength,
   });
 
   final String name;
@@ -24,6 +25,7 @@ class MobileChatScreen extends ConsumerWidget {
   final String profilePic;
   final bool isGroupChat;
   final String chatRoomId;
+  final int membersLength;
 
   void makeCall(WidgetRef ref, BuildContext context) {
     ref
@@ -187,6 +189,7 @@ class MobileChatScreen extends ConsumerWidget {
                 receiverUserId: uid,
                 isGroupChat: isGroupChat,
                 chatRoomId: chatRoomId,
+                membersLength: membersLength,
               ),
             ),
             BottomChatWidget(

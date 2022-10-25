@@ -49,6 +49,7 @@ class _ContactsListState extends ConsumerState<ContactsList>
                                 "profilePic": group.groupPic,
                                 "isGroupChat": true,
                                 'chatRoomId': group.chatRoomId,
+                                'groupMembers': group.memberUid.length,
                               });
                         },
                         child: ListTile(
@@ -105,6 +106,7 @@ class _ContactsListState extends ConsumerState<ContactsList>
                                 "profilePic": chatContactData.profilePic,
                                 "isGroupChat": false,
                                 'chatRoomId': chatContactData.chatRoomId,
+                                'groupMembers': 0,
                               });
                         },
                         child: ListTile(
