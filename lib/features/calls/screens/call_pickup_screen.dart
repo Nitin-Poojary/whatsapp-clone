@@ -86,7 +86,13 @@ class CallPickupScreen extends ConsumerWidget {
                               color: Colors.red,
                             ),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                ref.read(callControllerProvider).endCall(
+                                      context,
+                                      call.callerId,
+                                      call.receiverId,
+                                    );
+                              },
                               icon: const Icon(
                                 Icons.call_end,
                                 color: whiteColor,

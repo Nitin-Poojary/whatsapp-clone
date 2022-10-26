@@ -67,10 +67,15 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                             );
                         Navigator.pop(context);
                       },
-                      icon: const Icon(
-                        Icons.call_end,
-                        color: whiteColor,
-                        size: 30,
+                      icon: Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.call_end,
+                          color: whiteColor,
+                          size: 30,
+                        ),
                       ),
                     ),
                   ),

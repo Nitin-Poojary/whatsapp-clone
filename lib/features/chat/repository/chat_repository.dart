@@ -358,26 +358,28 @@ class ChatRepository {
             .doc(messageId)
             .update({'isSeen': true});
       } else {
-        receiverUserId.add(viewerId);
-        if (membersLength == receiverUserId.length) {
-          await firestore
-              .collection("chatMessages")
-              .doc('groupChats')
-              .collection(chatRoomId)
-              .doc(messageId)
-              .update({
-            'isSeen': true,
-            'receiverId': receiverUserId,
-          });
-        } else {
-          await firestore
-              .collection("chatMessages")
-              .doc('groupChats')
-              .collection(chatRoomId)
-              .doc(messageId)
-              .update({
-            'receiverId': receiverUserId,
-          });
+        if (!receiverUserId.contains(viewerId)) {
+          receiverUserId.add(viewerId);
+          if (membersLength == receiverUserId.length) {
+            await firestore
+                .collection("chatMessages")
+                .doc('groupChats')
+                .collection(chatRoomId)
+                .doc(messageId)
+                .update({
+              'isSeen': true,
+              'receiverId': receiverUserId,
+            });
+          } else {
+            await firestore
+                .collection("chatMessages")
+                .doc('groupChats')
+                .collection(chatRoomId)
+                .doc(messageId)
+                .update({
+              'receiverId': receiverUserId,
+            });
+          }
         }
       }
     } catch (e) {

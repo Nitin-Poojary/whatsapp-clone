@@ -97,7 +97,7 @@ class ChatContoller {
       String chatRoomId,
       bool isGroupChat,
       int membersLength,
-      String senderId) async {
+      String viewerId) async {
     chatRepository.setChatMessageSeen(
       context: context,
       chatRoomId: chatRoomId,
@@ -105,7 +105,7 @@ class ChatContoller {
       membersLength: membersLength,
       messageId: messageId,
       receiverUserId: receiverUserId,
-      viewerId: senderId,
+      viewerId: viewerId,
     );
   }
 }
