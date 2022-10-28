@@ -25,7 +25,7 @@ class SelectContactsRepository {
         contacts = await FlutterContacts.getContacts(withProperties: true);
       }
     } catch (e) {
-      debugPrint(e.toString());
+      print(e.toString());
     }
     return contacts;
   }

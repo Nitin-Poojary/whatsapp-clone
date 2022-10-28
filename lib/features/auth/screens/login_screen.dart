@@ -16,6 +16,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   late TextEditingController _phoneController;
   Country? country;
+  bool isSendingPhoneNumber = false;
 
   @override
   void initState() {
@@ -43,6 +44,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void sendPhoneNumber() {
     String phoneNumber = _phoneController.text.trim();
     if (country != null && phoneNumber.isNotEmpty) {
+      setState(() {
+        isSendingPhoneNumber = true;
+      });
       ref
           .read(authContollerProvider)
           .signinWithPhoneNumber(context, '+${country!.phoneCode}$phoneNumber');
@@ -108,7 +112,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               width: 90,
               child: CustomButton(
                 text: "NEXT",
-                onPressed: sendPhoneNumber,
+                onPressed: isSendingPhoneNumber ? null : sendPhoneNumber,
               ),
             )
           ],
