@@ -36,7 +36,7 @@ class MessageReplyPreview extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  messageReply!.isMe ? 'You' : 'Other',
+                  messageReply!.isMe ? 'You' : 'mummy',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),

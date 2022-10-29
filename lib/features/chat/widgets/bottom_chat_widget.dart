@@ -153,6 +153,10 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
     final messageReply = ref.watch(messageReplyProvider);
     bool isShowMessageReply = messageReply != null;
 
+    if (isShowMessageReply) {
+      _focusNode.requestFocus();
+    }
+
     return WillPopScope(
       onWillPop: () async {
         if (_isShowEmojiContainer) {

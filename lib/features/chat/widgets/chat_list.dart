@@ -55,54 +55,74 @@ class _ChatsListState extends ConsumerState<ChatsList> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: widget.isGroupChat
-          ? ref.read(chatControllerProvider).getGroupChat(widget.chatRoomId)
-          : ref.read(chatControllerProvider).getChatLists(widget.chatRoomId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Loader();
-        }
+    return WillPopScope(
+      onWillPop: () async {
+        ref.read(messageReplyProvider.state).update((state) => null);
+        return true;
+      },
+      child: StreamBuilder(
+        stream: widget.isGroupChat
+            ? ref.read(chatControllerProvider).getGroupChat(widget.chatRoomId)
+            : ref.read(chatControllerProvider).getChatLists(widget.chatRoomId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Loader();
+          }
 
-        SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-          _chatScrollController
-              .jumpTo(_chatScrollController.position.maxScrollExtent);
-        });
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+            _chatScrollController
+                .jumpTo(_chatScrollController.position.maxScrollExtent);
+          });
 
-        return ListView.builder(
-          controller: _chatScrollController,
-          itemCount: snapshot.data!.length,
-          itemBuilder: (context, index) {
-            final Message messageData = snapshot.data![index];
-            if (!messageData.isSeen &&
-                widget.isGroupChat &&
-                messageData.senderId !=
-                    FirebaseAuth.instance.currentUser!.uid) {
-              ref.read(chatControllerProvider).setChatMessageSeen(
-                    context,
-                    [widget.receiverUserId],
-                    messageData.messageId,
-                    widget.chatRoomId,
-                    widget.isGroupChat,
-                    widget.membersLength,
-                    FirebaseAuth.instance.currentUser!.uid,
-                  );
-            } else if (!widget.isGroupChat &&
-                messageData.receiverId[0] ==
-                    FirebaseAuth.instance.currentUser!.uid) {
-              ref.read(chatControllerProvider).setChatMessageSeen(
-                    context,
-                    [widget.receiverUserId],
-                    messageData.messageId,
-                    widget.chatRoomId,
-                    widget.isGroupChat,
-                    widget.membersLength,
-                    FirebaseAuth.instance.currentUser!.uid,
-                  );
-            }
-            if (messageData.senderId ==
-                FirebaseAuth.instance.currentUser!.uid) {
-              return MyMessageCard(
+          return ListView.builder(
+            controller: _chatScrollController,
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              final Message messageData = snapshot.data![index];
+              if (!messageData.isSeen &&
+                  widget.isGroupChat &&
+                  messageData.senderId !=
+                      FirebaseAuth.instance.currentUser!.uid) {
+                ref.read(chatControllerProvider).setChatMessageSeen(
+                      context,
+                      [widget.receiverUserId],
+                      messageData.messageId,
+                      widget.chatRoomId,
+                      widget.isGroupChat,
+                      widget.membersLength,
+                      FirebaseAuth.instance.currentUser!.uid,
+                    );
+              } else if (!widget.isGroupChat &&
+                  messageData.receiverId[0] ==
+                      FirebaseAuth.instance.currentUser!.uid) {
+                ref.read(chatControllerProvider).setChatMessageSeen(
+                      context,
+                      [widget.receiverUserId],
+                      messageData.messageId,
+                      widget.chatRoomId,
+                      widget.isGroupChat,
+                      widget.membersLength,
+                      FirebaseAuth.instance.currentUser!.uid,
+                    );
+              }
+              if (messageData.senderId ==
+                  FirebaseAuth.instance.currentUser!.uid) {
+                return MyMessageCard(
+                  message: messageData.text,
+                  date: DateFormat.Hm().format(messageData.timeSent),
+                  messageType: messageData.type,
+                  repliedText: messageData.repliedMessage,
+                  userName: messageData.repliedTo,
+                  repliedMessageType: messageData.repliedMessageType,
+                  onRightSwipe: () => onMessageSwipe(
+                    messageData.text,
+                    true,
+                    messageData.type,
+                  ),
+                  isSeen: messageData.isSeen,
+                );
+              }
+              return SendersMessageCard(
                 message: messageData.text,
                 date: DateFormat.Hm().format(messageData.timeSent),
                 messageType: messageData.type,
@@ -111,28 +131,14 @@ class _ChatsListState extends ConsumerState<ChatsList> {
                 repliedMessageType: messageData.repliedMessageType,
                 onRightSwipe: () => onMessageSwipe(
                   messageData.text,
-                  true,
+                  false,
                   messageData.type,
                 ),
-                isSeen: messageData.isSeen,
               );
-            }
-            return SendersMessageCard(
-              message: messageData.text,
-              date: DateFormat.Hm().format(messageData.timeSent),
-              messageType: messageData.type,
-              repliedText: messageData.repliedMessage,
-              userName: messageData.repliedTo,
-              repliedMessageType: messageData.repliedMessageType,
-              onRightSwipe: () => onMessageSwipe(
-                messageData.text,
-                false,
-                messageData.type,
-              ),
-            );
-          },
-        );
-      },
+            },
+          );
+        },
+      ),
     );
   }
 }
