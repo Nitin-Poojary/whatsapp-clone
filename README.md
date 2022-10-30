@@ -4,10 +4,12 @@
 ## Introduction
 
 Implemented features of WhatsApp and built a clone where users can connect and communitcate with each other. The user interface for the app is fully [reponsive](https://whatsapp-ui-pu76.vercel.app/#/) but user should have an android device to use its features.
+
 ## Technologies uses
 
 [![Flutter](https://www.vectorlogo.zone/logos/flutterio/flutterio-icon.svg)](https://flutter.dev) [![Firebase](https://www.vectorlogo.zone/logos/firebase/firebase-icon.svg)](https://firebase.google.com/)
 ## Features
+
 
 - Phone number authentication
   <p><img src="https://github.com/Nitin-Poojary/whatsapp-clone-gifs/blob/master/WhatsApp%20clone%20gifs/PhoneNumber-Auth.gif" heigth="350" width="230" alt="phone number authentication"></p>
