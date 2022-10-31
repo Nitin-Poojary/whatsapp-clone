@@ -8,6 +8,13 @@ Implemented features of WhatsApp and built a clone where users can connect and c
 ## Technologies uses
 
 [![Flutter](https://www.vectorlogo.zone/logos/flutterio/flutterio-icon.svg)](https://flutter.dev) [![Firebase](https://www.vectorlogo.zone/logos/firebase/firebase-icon.svg)](https://firebase.google.com/)
+
+#### Server Side : 
+Firebase auth, Firebase storage, Firebase cloud firestore
+
+#### Client Side :
+Flutter, riverpod (for state management)
+
 ## Features
 
 
