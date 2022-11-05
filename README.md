@@ -13,7 +13,7 @@ Implemented features of WhatsApp and built a clone where users can connect and c
 Firebase auth, Firebase storage, Firebase cloud firestore
 
 #### Client Side :
-Flutter, riverpod (for state management)
+Flutter, Dart, riverpod (for state management)
 
 ## Features
 
