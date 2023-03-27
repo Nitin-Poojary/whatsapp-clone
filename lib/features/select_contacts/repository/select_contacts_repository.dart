@@ -24,9 +24,7 @@ class SelectContactsRepository {
       if (await FlutterContacts.requestPermission()) {
         contacts = await FlutterContacts.getContacts(withProperties: true);
       }
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (e) {}
     return contacts;
   }
 

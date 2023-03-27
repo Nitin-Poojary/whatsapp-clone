@@ -185,15 +185,9 @@ class _BottomChatWidgetState extends ConsumerState<BottomChatWidget> {
                         controller: _messageController,
                         focusNode: _focusNode,
                         onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            setState(() {
-                              _isShowSendButton = true;
-                            });
-                          } else {
-                            setState(() {
-                              _isShowSendButton = false;
-                            });
-                          }
+                          setState(() {
+                            _isShowSendButton = value.isNotEmpty;
+                          });
                         },
                         decoration: InputDecoration(
                           filled: true,
